@@ -28,17 +28,12 @@
     );
     $upload_context  = stream_context_create($upload_options);
     $result = file_get_contents($UPLOAD_URL, false, $upload_context);
-    if ($result === FALSE) {
-        die('Upload url is either not up or does not exist!');
-    }
-    else {
-        /*
-            JSON object containing:
-            - (bool) success
-            - (str) error
-            - (int) log_id
-            - (str) url
-        */
-    }
+    /*
+        JSON object containing:
+        - (bool) success
+        - (str) error
+        - (int) log_id
+        - (str) url
+    */
 
 ?>
