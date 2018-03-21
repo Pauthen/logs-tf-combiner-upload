@@ -21,7 +21,7 @@
     );
     $upload_options = array(
         'http' => array(
-            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'header'  => "Content-type: multipart/form-data",
             'method'  => 'POST',
             'content' => http_build_query($upload_data)
         )
