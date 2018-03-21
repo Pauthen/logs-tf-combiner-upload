@@ -2,7 +2,7 @@
 
     /* Get json data for logs from urls first */
 
-    $API_KEY = '04b3e6f3772ea9669c25de77015a9b59';
+    $API_KEY = '_API_KEY_';
     $UPLOAD_URL = 'http://logs.tf/upload';
     $_title, $_map, $_key, $_logfile, $_uploader;
 
