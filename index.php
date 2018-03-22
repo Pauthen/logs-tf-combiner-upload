@@ -1,4 +1,7 @@
 <?php
+    /*
+        php?upload[]=<@file>&upload[]=<@file>&title=<log title>&map=<map name>&api=<api key>
+    */
     public static function deleteDir($dirPath) {
         if (! is_dir($dirPath)) {
             throw new InvalidArgumentException("$dirPath must be a directory");
