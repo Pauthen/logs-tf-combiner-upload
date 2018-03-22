@@ -23,12 +23,20 @@
         array_push($log_ids, $upload_url_id);
     }
 
-    $storage_dir = 'temp/' . str_replace(array('.', ':'), '-' , $USER_IP) . '/';
+    $storage_dir = str_replace(array('.', ':'), '-' , $USER_IP) . '/';
+    $log_files = array();
     mkdir(substr($storage_dir, 0, -1));
     foreach($log_ids as $id) {
-        file_put_contents($storage_dir . $id . '_log.zip', fopen('http://logs.tf/logs/log_' . $id . '.log.zip'));
-        //EXAMPLE: ./temp/255-255-255-0/1234567_log.zip
+        $log_zip_dir = $storage_dir . $id . '_log.zip';
+        file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip'));
+        //EXAMPLE: ./255-255-255-0/1234567_log.zip
+        $log_zip = new ZipArchive;
+        $log_zip->open($log_zip_dir);
+        $log_zip->extractTo($storage_dir);
+        $log_zip->close();
+        array_push($log_files, $storage_dir . 'log_' . $id . '.log');
     }
+    //array for log file directories is stored in $log_files
 
     // TODO:                           //
     /* Combine both log files into one */
