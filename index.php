@@ -1,28 +1,42 @@
 <?php
 
+    function getIP() {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    $USER_IP = getIP();
+
     $upload_urls = $_GET['upload'];
     $log_ids = array();
-    $log_json_objects = array();
     foreach($upload_urls as $log_url) {
         $upload_url_parts = explode('/', $log_url);
         $upload_url_id = explode('#', end($upload_url_parts))[0];
         array_push($log_ids, $upload_url_id);
     }
+
+    $storage_dir = 'temp/' . str_replace(array('.', ':'), '-' , $USER_IP) . '/';
     foreach($log_ids as $id) {
-        $log_json_obj = file_get_contents("http://logs.tf/json/$id");
-        array_push($log_json_objects, $log_json_obj);
+        file_put_contents($storage_dir . $id . '_log.zip', fopen('http://logs.tf/logs/log_' . $id . '.log.zip'));
+        //EXAMPLE: ./temp/255-255-255-0/1234567_log.zip
     }
-    //all json data from every log is now stored in $log_json_objects
 
-    // TODO:                                       //
-    /* Combine all the data into one log file here */
-    //                                             //
+    // TODO:                           //
+    /* Combine both log files into one */
+    //                                 //
 
-    $API_KEY = '_API_KEY_';
+    $API_KEY = $_GET['api'];
     $UPLOAD_URL = 'http://logs.tf/upload';
     $_title, $_map, $_key, $_logfile, $_uploader;
 
-    //multipart/form-data POST
     $_title = '_TITLE_';
     $_map = '_MAP_FROM_JSON_DATA_';
     $_key = $API_KEY;
