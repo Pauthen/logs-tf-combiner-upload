@@ -2,7 +2,7 @@
     /*
         php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<api key>
     */
-    public static function deleteDir($dirPath) {
+    function deleteDir($dirPath) {
         if (! is_dir($dirPath)) {
             throw new InvalidArgumentException("$dirPath must be a directory");
         }
