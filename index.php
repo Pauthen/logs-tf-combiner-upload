@@ -1,6 +1,22 @@
 <?php
 
-    /* Get json data for logs from urls first */
+    $upload_urls = $_GET['upload'];
+    $log_ids = array();
+    $log_json_objects = array();
+    foreach($upload_urls as $log_url) {
+        $upload_url_parts = explode('/', $log_url);
+        $upload_url_id = explode('#', end($upload_url_parts))[0];
+        array_push($log_ids, $upload_url_id);
+    }
+    foreach($log_ids as $id) {
+        $log_json_obj = file_get_contents("http://logs.tf/json/$id");
+        array_push($log_json_objects, $log_json_obj);
+    }
+    //all json data from every log is now stored in $log_json_objects
+
+    // TODO:                                       //
+    /* Combine all the data into one log file here */
+    //                                             //
 
     $API_KEY = '_API_KEY_';
     $UPLOAD_URL = 'http://logs.tf/upload';
