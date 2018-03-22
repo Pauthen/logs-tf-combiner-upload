@@ -65,7 +65,7 @@
     $_title = '_TITLE_';
     $_map = '_MAP_FROM_JSON_DATA_';
     $_key = $API_KEY;
-    $_logfile = '_GENERATED_LOG_FILE_';
+    $_logfile = '@' . $storage_dir . 'LOG_FINAL.log';
     $_uploader = "Sharky Log Combiner v0.1";
     $upload_data = array(
         'title' => $_title,
