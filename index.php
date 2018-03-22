@@ -28,10 +28,12 @@
 
     $storage_dir = str_replace(array('.', ':'), '-' , $USER_IP) . '/';
     $log_files = array();
-    mkdir(substr($storage_dir, 0, -1));
+    if(!file_exists(substr($storage_dir, 0, -1))) {
+        mkdir(substr($storage_dir, 0, -1));
+    }
     foreach($log_ids as $id) {
         $log_zip_dir = $storage_dir . $id . '_log.zip';
-        file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip'));
+        file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
         //EXAMPLE: ./255-255-255-0/1234567_log.zip
         $log_zip = new ZipArchive;
         $log_zip->open($log_zip_dir);
@@ -48,13 +50,12 @@
 	}
 	fclose($final_log);
 
-    $API_KEY = $_GET['api'];
     $UPLOAD_URL = 'http://logs.tf/upload';
     $_title; $_map; $_key; $_logfile; $_uploader;
 
     $_title = $_GET['title'];
     $_map = $_GET['map'];
-    $_key = $API_KEY;
+    $_key = $_GET['api'];
     $_logfile = '@' . $storage_dir . 'LOG_FINAL.log';
     $_uploader = "Sharky Log Combiner v0.1";
     $upload_data = array(
@@ -82,4 +83,9 @@
     */
     echo($result);
 
-?>
+    $ffiles = glob($storage_dir . '*');
+    foreach($ffiles as $ffile) {
+       unlink($ffile);
+    }
+
+?>			
