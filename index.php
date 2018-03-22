@@ -1,6 +1,6 @@
 <?php
     /*
-        php?upload[]=<@file>&upload[]=<@file>&title=<log title>&map=<map name>&api=<api key>
+        php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<api key>
     */
     public static function deleteDir($dirPath) {
         if (! is_dir($dirPath)) {
