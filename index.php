@@ -96,6 +96,7 @@
         - (int) log_id
         - (str) url
     */
+	echo($result);
 
     deleteDir($storage_dir);
 
