@@ -62,8 +62,8 @@
     $UPLOAD_URL = 'http://logs.tf/upload';
     $_title, $_map, $_key, $_logfile, $_uploader;
 
-    $_title = '_TITLE_';
-    $_map = '_MAP_FROM_JSON_DATA_';
+    $_title = $_GET['title'];
+    $_map = $_GET['map'];
     $_key = $API_KEY;
     $_logfile = '@' . $storage_dir . 'LOG_FINAL.log';
     $_uploader = "Sharky Log Combiner v0.1";
