@@ -67,7 +67,7 @@
 
     $API_KEY = $_GET['api'];
     $UPLOAD_URL = 'http://logs.tf/upload';
-    $_title, $_map, $_key, $_logfile, $_uploader;
+    $_title; $_map; $_key; $_logfile; $_uploader;
 
     $_title = $_GET['title'];
     $_map = $_GET['map'];
