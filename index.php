@@ -38,7 +38,8 @@
     $log_ids = array();
     foreach($upload_urls as $log_url) {
         $upload_url_parts = explode('/', $log_url);
-        $upload_url_id = explode('#', end($upload_url_parts))[0];
+        $upload_url_id_array = explode('#', end($upload_url_parts));
+	$upload_url_id = $upload_url_id_array[0];
         array_push($log_ids, $upload_url_id);
     }
 
