@@ -24,6 +24,7 @@
     }
 
     $storage_dir = 'temp/' . str_replace(array('.', ':'), '-' , $USER_IP) . '/';
+    mkdir(substr($storage_dir, 0, -1));
     foreach($log_ids as $id) {
         file_put_contents($storage_dir . $id . '_log.zip', fopen('http://logs.tf/logs/log_' . $id . '.log.zip'));
         //EXAMPLE: ./temp/255-255-255-0/1234567_log.zip
