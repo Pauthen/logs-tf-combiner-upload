@@ -67,4 +67,8 @@
         - (str) url
     */
 
+    //Delete when done, turn this into a for loop later
+    unlink($storage_dir . '_LOG_ID_');
+    rmdir(substr($storage_dir, 0, -1));
+
 ?>
