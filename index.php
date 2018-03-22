@@ -57,9 +57,12 @@
     }
     //array for log file directories is stored in $log_files
 
-    // TODO:                           //
-    /* Combine both log files into one */
-    //                                 //
+    $final_log = fopen($storage_dir . 'LOG_FINAL.log', 'a+');
+	foreach($log_files as $f) {
+		$l = file_get_contents($f) . "\n";
+		fwrite($final_log, $l);
+	}
+	fclose($final_log);
 
     $API_KEY = $_GET['api'];
     $UPLOAD_URL = 'http://logs.tf/upload';
