@@ -1,10 +1,9 @@
 <?php
-
 /*
 php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<api key>
 */
 header("Access-Control-Allow-Origin: *");
-error_reporting(0);
+//error_reporting(0);
 function url_exists($url)
 {
     if (!$fp = curl_init($url))
@@ -22,9 +21,7 @@ function getIP()
     }
     return $ip;
 }
-
 $USER_IP = getIP();
-
 if (!isset($_POST['api'])) {
     exit('{"error": "Missing api field.", "success": false}');
 }
@@ -37,7 +34,6 @@ if (!isset($_POST['map'])) {
 if (!isset($_POST['upload'])) {
     exit('{"error": "Missing upload[] field.", "success": false}');
 }
-
 $upload_urls = $_POST['upload'];
 if (!is_array($upload_urls)) {
     exit('{"error": "Upload[] field must contain an array of valid urls.", "success": false}');
@@ -49,7 +45,6 @@ foreach ($upload_urls as $log_url) {
     $upload_url_id       = $upload_url_id_array[0];
     array_push($log_ids, $upload_url_id);
 }
-
 $storage_dir = str_replace(array(
     '.',
     ':'
@@ -72,24 +67,21 @@ foreach ($log_ids as $id) {
     array_push($log_files, $storage_dir . 'log_' . $id . '.log');
 }
 //array for log file directories is stored in $log_files
-
-$final_log = fopen($storage_dir . 'LOG_FINAL-' . microtime() . '.log', 'a+');
+$final_log_dir = $storage_dir . 'LOG_FINAL-' . microtime() . '.log';
+$final_log = fopen($final_log_dir, 'a+');
 foreach ($log_files as $f) {
     $l = file_get_contents($f) . "\n";
     fwrite($final_log, $l);
 }
 fclose($final_log);
-
 $UPLOAD_URL = 'http://logs.tf/upload';
-
 $post = array(
     'title' => $_POST['title'],
     'map' => $_POST['map'],
     'key' => $_POST['api'],
-    'logfile' => curl_file_create($storage_dir . 'LOG_FINAL-' . microtime() . '.log'),
+    'logfile' => curl_file_create($final_log_dir),
     'uploader' => "Sharky's Logify v1.3"
 );
-
 $ch     = curl_init($UPLOAD_URL);
 $ch_set = array(
     CURLOPT_POST => 1,
@@ -101,10 +93,8 @@ $ch_set = array(
 curl_setopt_array($ch, $ch_set);
 $response = curl_exec($ch);
 echo ($response);
-
 $ffiles = glob($storage_dir . '*');
 foreach ($ffiles as $ffile) {
     unlink($ffile);
 }
-
 ?>
