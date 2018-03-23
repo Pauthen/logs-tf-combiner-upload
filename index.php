@@ -59,7 +59,7 @@
     $_map = $_POST['map'];
     $_key = $_POST['api'];
     $_logfile = curl_file_create($storage_dir . 'LOG_FINAL.log');  //'@' . $storage_dir . 'LOG_FINAL.log'
-    $_uploader = "Sharky Log Combiner v0.1";
+    $_uploader = "Sharky Logify v1.3";
 
     $post = array(
         'title' => $_title,
