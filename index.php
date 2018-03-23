@@ -19,7 +19,23 @@
 
     $USER_IP = getIP();
 
+	if(!isset($_POST['api'])) {
+		exit('{"error": "Missing api field.", "success": false}');
+	}
+	if(!isset($_POST['title'])) {
+		exit('{"error": "Missing title field.", "success": false}');
+	}
+	if(!isset($_POST['map'])) {
+		exit('{"error": "Missing map field.", "success": false}');
+	}
+	if(!isset($_POST['upload'])) {
+		exit('{"error": "Missing upload[] field.", "success": false}');
+	}
+
     $upload_urls = $_POST['upload'];
+	if(!is_array($upload_urls)) {
+		exit('{"error": "Upload[] field must contain an array of valid urls.", "success": false}');
+	}
     $log_ids = array();
     foreach($upload_urls as $log_url) {
         $upload_url_parts = explode('/', $log_url);
@@ -53,39 +69,27 @@
 	fclose($final_log);
 
     $UPLOAD_URL = 'http://logs.tf/upload';
-    $_title; $_map; $_key; $_logfile; $_uploader;
-
-    $_title = $_POST['title'];
-    $_map = $_POST['map'];
-    $_key = $_POST['api'];
-    $_logfile = curl_file_create($storage_dir . 'LOG_FINAL.log');
-    $_uploader = "Sharky's Logify v1.3";
 
     $post = array(
-        'title' => $_title,
-        'map' => $_map,
-        'key' => $_key,
-        'logfile' => $_logfile,
-        'uploader' => $_uploader
+        'title' => $_POST['title'],
+        'map' => $_POST['map'],
+        'key' => $_POST['api'],
+        'logfile' => curl_file_create($storage_dir . 'LOG_FINAL.log'),
+        'uploader' => "Sharky's Logify v1.3"
     );
 
     $ch = curl_init( $UPLOAD_URL );
-    curl_setopt( $ch, CURLOPT_POST, 1);
-    curl_setopt( $ch, CURLOPT_POSTFIELDS, $post);
-    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-    curl_setopt( $ch, CURLOPT_HEADER, 0);
-    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
+	$ch_set = array(
+		CURLOPT_POST => 1,
+		CURLOPT_POSTFIELDS => $post,
+		CURLOPT_FOLLOWLOCATION => 1,
+		CURLOPT_HEADER => 0,
+		CURLOPT_RETURNTRANSFER => 1
+	);
+	curl_setopt_array($ch, ch_set);
     $response = curl_exec( $ch );
-    /*
-        JSON object containing:
-        - (bool) success
-        - (str) error
-        - (int) log_id
-        - (str) url
-    */
     if(!$response) {
-	exit('{"error": "Log does not exist!", "success": false}');
+		exit('{"error": "Log does not exist!", "success": false}');
     }
     echo($response);
 
