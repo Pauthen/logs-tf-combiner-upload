@@ -100,9 +100,6 @@ $ch_set = array(
 );
 curl_setopt_array($ch, $ch_set);
 $response = curl_exec($ch);
-if (!$response) {
-    exit('{"error": "Log does not exist!", "success": false}');
-}
 echo ($response);
 
 $ffiles = glob($storage_dir . '*');
