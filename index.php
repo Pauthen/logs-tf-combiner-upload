@@ -56,7 +56,7 @@
     foreach($log_ids as $id) {
         $log_zip_dir = $storage_dir . $id . '_log.zip';
 	if(!url_exists('http://logs.tf/logs/log_' . $id . '.log.zip')) {
-		exit('{"error": "Invalid log url submitted.", "success": false}')
+		exit('{"error": "Invalid log url submitted.", "success": false}');
 	}
         file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
         //EXAMPLE: ./255-255-255-0/1234567_log.zip
