@@ -73,7 +73,7 @@ foreach ($log_ids as $id) {
 }
 //array for log file directories is stored in $log_files
 
-$final_log = fopen($storage_dir . 'LOG_FINAL.log', 'a+');
+$final_log = fopen($storage_dir . 'LOG_FINAL-' . microtime() . '.log', 'a+');
 foreach ($log_files as $f) {
     $l = file_get_contents($f) . "\n";
     fwrite($final_log, $l);
@@ -86,7 +86,7 @@ $post = array(
     'title' => $_POST['title'],
     'map' => $_POST['map'],
     'key' => $_POST['api'],
-    'logfile' => curl_file_create($storage_dir . 'LOG_FINAL.log'),
+    'logfile' => curl_file_create($storage_dir . 'LOG_FINAL-' . microtime() . '.log'),
     'uploader' => "Sharky's Logify v1.3"
 );
 
