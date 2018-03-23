@@ -3,6 +3,7 @@
         php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<api key>
     */
     header("Access-Control-Allow-Origin: *");
+    error_reporting(0);
     function getIP() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
