@@ -58,8 +58,8 @@
     $_title = $_POST['title'];
     $_map = $_POST['map'];
     $_key = $_POST['api'];
-    $_logfile = curl_file_create($storage_dir . 'LOG_FINAL.log');  //'@' . $storage_dir . 'LOG_FINAL.log'
-    $_uploader = "Sharky Logify v1.3";
+    $_logfile = curl_file_create($storage_dir . 'LOG_FINAL.log');
+    $_uploader = "Sharky's Logify v1.3";
 
     $post = array(
         'title' => $_title,
@@ -84,6 +84,9 @@
         - (int) log_id
         - (str) url
     */
+    if(!$response) {
+	exit('{"error": "Log does not exist!", "success": false}');
+    }
     echo($response);
 
     $ffiles = glob($storage_dir . '*');
