@@ -2,6 +2,7 @@
     /*
         php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<api key>
     */
+    header("Access-Control-Allow-Origin: *");
     function getIP() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -17,7 +18,7 @@
 
     $USER_IP = getIP();
 
-    $upload_urls = $_GET['upload'];
+    $upload_urls = $_POST['upload'];
     $log_ids = array();
     foreach($upload_urls as $log_url) {
         $upload_url_parts = explode('/', $log_url);
@@ -53,27 +54,28 @@
     $UPLOAD_URL = 'http://logs.tf/upload';
     $_title; $_map; $_key; $_logfile; $_uploader;
 
-    $_title = $_GET['title'];
-    $_map = $_GET['map'];
-    $_key = $_GET['api'];
-    $_logfile = '@' . $storage_dir . 'LOG_FINAL.log';
+    $_title = $_POST['title'];
+    $_map = $_POST['map'];
+    $_key = $_POST['api'];
+    $_logfile = curl_file_create($storage_dir . 'LOG_FINAL.log');  //'@' . $storage_dir . 'LOG_FINAL.log'
     $_uploader = "Sharky Log Combiner v0.1";
-    $upload_data = array(
+
+    $post = array(
         'title' => $_title,
         'map' => $_map,
         'key' => $_key,
         'logfile' => $_logfile,
         'uploader' => $_uploader
     );
-    $upload_options = array(
-        'http' => array(
-            'header'  => "Content-type: multipart/form-data",
-            'method'  => 'POST',
-            'content' => http_build_query($upload_data)
-        )
-    );
-    $upload_context  = stream_context_create($upload_options);
-    $result = file_get_contents($UPLOAD_URL, false, $upload_context);
+
+    $ch = curl_init( $UPLOAD_URL );
+    curl_setopt( $ch, CURLOPT_POST, 1);
+    curl_setopt( $ch, CURLOPT_POSTFIELDS, $post);
+    curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt( $ch, CURLOPT_HEADER, 0);
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $response = curl_exec( $ch );
     /*
         JSON object containing:
         - (bool) success
@@ -81,11 +83,11 @@
         - (int) log_id
         - (str) url
     */
-    echo($result);
+    echo($response);
 
     $ffiles = glob($storage_dir . '*');
     foreach($ffiles as $ffile) {
        unlink($ffile);
     }
 
-?>			
+?>
