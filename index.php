@@ -4,6 +4,10 @@
     */
     header("Access-Control-Allow-Origin: *");
     error_reporting(0);
+    function url_exists($url) {
+        if (!$fp = curl_init($url)) return false;
+        return true;
+    }
     function getIP() {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -51,6 +55,9 @@
     }
     foreach($log_ids as $id) {
         $log_zip_dir = $storage_dir . $id . '_log.zip';
+	if(!url_exists('http://logs.tf/logs/log_' . $id . '.log.zip')) {
+		exit('{"error": "Invalid log url submitted.", "success": false}')
+	}
         file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
         //EXAMPLE: ./255-255-255-0/1234567_log.zip
         $log_zip = new ZipArchive;
@@ -86,7 +93,7 @@
 		CURLOPT_HEADER => 0,
 		CURLOPT_RETURNTRANSFER => 1
 	);
-	curl_setopt_array($ch, ch_set);
+	curl_setopt_array($ch, $ch_set);
     $response = curl_exec( $ch );
     if(!$response) {
 		exit('{"error": "Log does not exist!", "success": false}');
