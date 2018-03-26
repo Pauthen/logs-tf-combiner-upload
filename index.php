@@ -72,7 +72,7 @@ if (!file_exists(substr($storage_dir, 0, -1))) {
 }
 foreach ($log_ids as $id) {
     $log_zip_dir = $storage_dir . $id . '_log.zip';
-    if (!curl_init('http://logs.tf/' . $id)) {
+    if (!checkURL('http://logs.tf/' . $id)) {
         exit('{"error": "Invalid log url submitted.", "success": false}');
     }
     file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
