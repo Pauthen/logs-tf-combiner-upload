@@ -4,29 +4,6 @@ php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<
 */
 header("Access-Control-Allow-Origin: *");
 //error_reporting(0);
-function checkURL($url)
-{
-    $fcurl = curl_init($url);
-    curl_setopt($fcurl, CURLOPT_NOBODY, true);
-    $fresult = curl_exec($curl);
-    if ($fresult !== false) 
-    {
-        $fstatusCode = curl_getinfo($fcurl, CURLINFO_HTTP_CODE);  
-        if ($fstatusCode == 404) 
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
-    else
-    {
-        return false;
-    }
-    return false;
-}
 function getIP()
 {
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -72,7 +49,7 @@ if (!file_exists(substr($storage_dir, 0, -1))) {
 }
 foreach ($log_ids as $id) {
     $log_zip_dir = $storage_dir . $id . '_log.zip';
-    if (!checkURL('http://logs.tf/' . $id)) {
+    if (!$chk = fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r')) {
         exit('{"error": "Invalid log url submitted.", "success": false}');
     }
     file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
