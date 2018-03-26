@@ -4,6 +4,29 @@ php?upload[]=<log url>&upload[]=<log url>&title=<log title>&map=<map name>&api=<
 */
 header("Access-Control-Allow-Origin: *");
 //error_reporting(0);
+function checkURL($url)
+{
+    $fcurl = curl_init($url);
+    curl_setopt($fcurl, CURLOPT_NOBODY, true);
+    $fresult = curl_exec($curl);
+    if ($fresult !== false) 
+    {
+        $fstatusCode = curl_getinfo($fcurl, CURLINFO_HTTP_CODE);  
+        if ($fstatusCode == 404) 
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+    else
+    {
+        return false;
+    }
+    return false;
+}
 function getIP()
 {
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
