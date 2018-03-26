@@ -52,13 +52,15 @@ foreach ($log_ids as $id) {
     if (!$chk = fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r')) {
         exit('{"error": "Invalid log url submitted.", "success": false}');
     }
-    file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
-    //EXAMPLE: ./255-255-255-0/1234567_log.zip
-    $log_zip = new ZipArchive;
-    $log_zip->open($log_zip_dir);
-    $log_zip->extractTo($storage_dir);
-    $log_zip->close();
-    array_push($log_files, $storage_dir . 'log_' . $id . '.log');
+    else {
+        file_put_contents($log_zip_dir, fopen('http://logs.tf/logs/log_' . $id . '.log.zip', 'r'));
+        //EXAMPLE: ./255-255-255-0/1234567_log.zip
+        $log_zip = new ZipArchive;
+        $log_zip->open($log_zip_dir);
+        $log_zip->extractTo($storage_dir);
+        $log_zip->close();
+        array_push($log_files, $storage_dir . 'log_' . $id . '.log');
+    }
 }
 //array for log file directories is stored in $log_files
 $final_log_dir = $storage_dir . 'LOG_FINAL-' . microtime() . '.log';
